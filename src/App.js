@@ -7,18 +7,21 @@ class App extends React.Component{
         cityInfo: [],
     }
   }
+  
+  handleSubmit = (event) => {
+      event.preventDefault();
+  }
   render(){
     
     
     return(
     <>
     <h1>City Info From LocationIQ</h1>
+
+    <form onSubmit={this.handleSubmit}>
+      <button type = "submit">Display City Info</button>
+    </form>
     </>;
-
-
-
-
-
     )
   }
 
