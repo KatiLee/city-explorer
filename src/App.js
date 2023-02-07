@@ -51,23 +51,32 @@ class App extends React.Component{
       });
     }
   };
+handleCityInput = (event) => {
+  this.setState({
+    city: event.target.value,
+  });
+};
 
   render(){
-    let adventureWeather = 
+    let adventureWeather = this.state.cityInfo.map((cityName, index) => {
+      return <li key = {index}>{cityName.name}</li>;
+    });
     
-    return <>
+    return (
+    <>
     <h1>Adventure Time!</h1>
 
-    <form onSubmit={this.handleSubmit}>
-      <button type = "submit">Where To?</button>
+    <form id = "form" onSubmit={this.submitCityHandler}>
+      <label>
+        {" "}
+        Where to?
+        <input type= "text" onInput = {this.handleCityInput} />
+      </label>
+      <button type = "submit">All you want to know!</button>
     </form>
-    </>;
-    
+    </>
+    );
   }
-
-
-
-
 }
 
 export default App;
