@@ -58,13 +58,14 @@ handleCityInput = (event) => {
 };
 
   render(){
-    // let adventureWeather = this.state.cityInfo.map((cityName, index) => {
-    //   return <li key = {index}>{cityName.name}</li>;
-    // });
+    let adventureInfo = this.state.cityInfo.map((cityName, index) => {
+      return <li key = {index}>{cityName.name}</li>;
+    });
     
     return (
     <>
     <h1>Adventure Time!</h1>
+    <ul>{adventureInfo}</ul>
 
     <form id = "form" onSubmit={this.submitCityHandler}>
       <label>
