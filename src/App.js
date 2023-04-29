@@ -58,9 +58,9 @@ handleCityInput = (event) => {
 };
 
   render(){
-    let adventureWeather = this.state.cityInfo.map((cityName, index) => {
-      return <li key = {index}>{cityName.name}</li>;
-    });
+    // let adventureWeather = this.state.cityInfo.map((cityName, index) => {
+    //   return <li key = {index}>{cityName.name}</li>;
+    // });
     
     return (
     <>
