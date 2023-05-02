@@ -1,28 +1,33 @@
+import './App.css';
 import React from 'react';
 import axios from 'axios';
 
 let API_KEY = process.env.REACT_APP_LOCATION_KEY;
 
 class App extends React.Component{
+
   constructor(props){
     super(props);
     this.state = {
-        cityInfo: [],
         city: "",
         cityData: {},
         error: false,
         errorMessage: "",
+        lat: "",
+        lon: "",
+        map: "",
     };
   }
   
-  handleSubmit = async (event) => {
+  submitCityHandler = async (event) => {
       event.preventDefault();
     try {
-      let cityInfoQuery = await axios.get("https://us1.locationiq.com/v1/search.php");
+      let cityInfo = await axios.get("https://us1.locationiq.com/v1/search.php");
       this.setState({
-        cityInfo: cityInfoQuery.data.results,
+        cityData: cityInfo.data[0],
         error: false,
-      });
+        areaMap: `https://maps.locationiq.com/v3/staticmap/search?key=${API_KEY}&center=${cityInfo.data[0].lat},${cityInfo.data[0].lon}&zoom=10`
+      }); 
     } catch (error){
       this.setState({
         error: true,
@@ -30,27 +35,14 @@ class App extends React.Component{
       });
     }
   };
-
-  submitCityHandler = async(event) => {
-    event.preventDefault();
-
-    try {
-      let url = `https://us1.locationiq.com/v1/search?key=${API_KEY}&q=${this.state.city}&format=json`;
-      console.log("does the url register?", url);
-      let cityInfo = await axios.get(url);
-      console.log("now does the city info work?", cityInfo.data[0]);
-
-      this.setState({
-        cityData: cityInfo.data[0],
-        error: false,
-      });
-    } catch (error) {
-      this.setState({
-        error: true,
-        errorMessage: `Oh No! There has been an error: ${error.response.status}`,
-      });
-    }
+  
+  handleCityQuery= async(event) => {
+    this.setState({
+      city: event.target.value,
+      error: false
+    });
   };
+    
 handleCityInput = (event) => {
   this.setState({
     city: event.target.value,
@@ -58,15 +50,9 @@ handleCityInput = (event) => {
 };
 
   render(){
-    let adventureInfo = this.state.cityInfo.map((cityName, index) => {
-      return <li key = {index}>{cityName.name}</li>;
-    });
-    
     return (
     <>
     <h1>Adventure Time!</h1>
-    <ul>{adventureInfo}</ul>
-
     <form id = "form" onSubmit={this.submitCityHandler}>
       <label>
         {" "}
@@ -75,9 +61,38 @@ handleCityInput = (event) => {
       </label>
       <button type = "submit">All you want to know!</button>
     </form>
+    <main>
+      {this.state.cityInfo && (
+        <>
+        <ul>
+          <li>City: {this.state.cityInfo.display_name}</li>
+          </ul>
+          </>
+      )}
+    </main>
     </>
     );
   }
 }
 
 export default App;
+
+// try {
+//   let url = `https://us1.locationiq.com/v1/search?key=${API_KEY}&q=${this.state.city}&format=json`;
+//   console.log("does the url register?", url);
+//   let cityInfo = await axios.get(url);
+//   console.log("now does the city info work?", cityInfo.data[0]);
+
+//   this.setState({
+//     cityData: cityInfo.data[0],
+//     lat: cityInfo.data[0].lat,
+//     lon: cityInfo.data[0].lon,
+//     error: false,
+//   });
+// } catch (error) {
+//   this.setState({
+//     error: true,
+//     errorMessage: `Oh No! There has been an error: ${error.response.status}`,
+//   });
+// }
+// };
