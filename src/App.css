@@ -19,14 +19,14 @@ button{
 }
 div {
   margin-top:15px;
-  margin-left: 120px;
-  margin-right: 120px;
+  margin-left: 140px;
+  margin-right: 110px;
   margin-bottom: 10px;
-  background-color: rgb(248, 243, 253);
+  background-color: rgb(242, 230, 255);
 }
-Image{
-  align-items: center;
-  border: 10px;
+img {
+  margin-left: 160px;
+  margin-bottom: 30px;
 }
 p {
   font-size: 21px;

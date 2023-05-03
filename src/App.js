@@ -62,8 +62,8 @@ handleCityInput = (event) => {
       <Card>{this.state.cityData.display_name}</Card>
       <Card>{this.state.cityData.lat}</Card>
       <Card>{this.state.cityData.lon}</Card>
+      </div>
       <Image src= {this.state.areaMap} />
-    </div>
     </>
     );
   }
