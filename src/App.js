@@ -2,7 +2,7 @@ import './App.css';
 import React from 'react';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Card } from 'react-bootstrap';
+import { Card, Image } from 'react-bootstrap';
 
 let API_KEY = process.env.REACT_APP_LOCATION_KEY;
 
@@ -17,7 +17,7 @@ class App extends React.Component{
         errorMessage: "",
         lat: "",
         lon: "",
-        map: "",
+        areaMap: "",
     };
   }
   
@@ -62,6 +62,7 @@ handleCityInput = (event) => {
       <Card>{this.state.cityData.display_name}</Card>
       <Card>{this.state.cityData.lat}</Card>
       <Card>{this.state.cityData.lon}</Card>
+      <Image src= {this.state.areaMap} />
     </main>
     </>
     );
