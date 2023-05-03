@@ -52,18 +52,18 @@ handleCityInput = (event) => {
         <form id = "form" onSubmit={this.submitCityHandler}>
         <label>
         {" "}
-        Where to?
+        <p>Where to?</p>
         <input type= "text" onInput = {this.handleCityInput} />
         </label>
       <button type = "submit">All you want to know!</button>
     </form>
-    <main>
+    <div>
       <Card>{this.state.errorMessage}</Card>
       <Card>{this.state.cityData.display_name}</Card>
       <Card>{this.state.cityData.lat}</Card>
       <Card>{this.state.cityData.lon}</Card>
       <Image src= {this.state.areaMap} />
-    </main>
+    </div>
     </>
     );
   }
