@@ -2,7 +2,7 @@ import './App.css';
 import React from 'react';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Card } from 'react-bootstrap';
+import { Card, Image } from 'react-bootstrap';
 
 let API_KEY = process.env.REACT_APP_LOCATION_KEY;
 
@@ -17,7 +17,7 @@ class App extends React.Component{
         errorMessage: "",
         lat: "",
         lon: "",
-        map: "",
+        areaMap: "",
     };
   }
   
@@ -52,17 +52,18 @@ handleCityInput = (event) => {
         <form id = "form" onSubmit={this.submitCityHandler}>
         <label>
         {" "}
-        Where to?
+        <p>Where to?</p>
         <input type= "text" onInput = {this.handleCityInput} />
         </label>
       <button type = "submit">All you want to know!</button>
     </form>
-    <main>
+    <div>
       <Card>{this.state.errorMessage}</Card>
       <Card>{this.state.cityData.display_name}</Card>
       <Card>{this.state.cityData.lat}</Card>
       <Card>{this.state.cityData.lon}</Card>
-    </main>
+      </div>
+      <Image src= {this.state.areaMap} />
     </>
     );
   }
