@@ -2,7 +2,7 @@ import './App.css';
 import React from 'react';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Card, Button } from 'react-bootstrap';
+import { Card } from 'react-bootstrap';
 
 let API_KEY = process.env.REACT_APP_LOCATION_KEY;
 
