@@ -2,7 +2,7 @@ import './App.css';
 import React from 'react';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Card, Image } from 'react-bootstrap';
+import { Card, Image, Alert } from 'react-bootstrap';
 import Weather from './modules/Weather.js';
 import Movie from './modules/Movie.js';
 
@@ -16,26 +16,36 @@ class App extends React.Component{
   constructor(props){
     super(props);
     this.state = {
-        city: "",
+        citySearch: "",
         cityData: {},
+
+        cityLat: "",
+        cityLon: "",
+        areaMap: "",
         error: false,
         errorMessage: "",
-        lat: "",
-        lon: "",
-        areaMap: "",
     };
+    this.weatherChild = React.createRef();
+    this.movieChild = React.createRef();
   }
   
   submitCityHandler = async (event) => {
       event.preventDefault();
     try {
-      let url = `https://us1.locationiq.com/v1/search?key=${API_KEY}&q=${this.state.city}& format=json`
+      let url = `https://us1.locationiq.com/v1/search?key=${API_KEY}&q=${this.state.city}&format=json`
       let cityInfo = await axios.get(url);
+      let longitude = cityInfo.data[0].lon;
+      let latitude = cityInfo.data[0].lat
       this.setState({
         cityData: cityInfo.data[0],
+        cityLat: cityInfo.data[0].lat,
+        cityLon: cityInfo.data[0].lon,
         error: false,
-        areaMap: `https://maps.locationiq.com/v3/staticmap/search?key=${API_KEY}&center=${cityInfo.data[0].lat},${cityInfo.data[0].lon}&zoom=10`
+        areaMap: `https://maps.locationiq.com/v3/staticmap/search?key=${API_KEY}&center=${cityInfo.data[0].latitude},${cityInfo.data[0].longitude}&zoom=10`
       }); 
+      let collectCityStuff = cityInfo.data[0].display_name.split(',')[0];
+      this.weatherChild.current.reqWeather(latitude, longitude, collectCityStuff);
+      this.movieChild.current.reqMovie(collectCityStuff);
     } catch (error){
       this.setState({
         error: true,
@@ -46,7 +56,7 @@ class App extends React.Component{
     
 handleCityInput = (event) => {
   this.setState({
-    city: event.target.value,
+    citySearch: event.target.value,
   });
 };
 
@@ -65,8 +75,8 @@ handleCityInput = (event) => {
     <div>
       <Card>{this.state.errorMessage}</Card>
       <Card>{this.state.cityData.display_name}</Card>
-      <Card>{this.state.cityData.lat}</Card>
-      <Card>{this.state.cityData.lon}</Card>
+      <Card>{this.state.cityData.cityLat}</Card>
+      <Card>{this.state.cityData.cityLon}</Card>
       </div>
       <Image src= {this.state.areaMap} />
     </>
