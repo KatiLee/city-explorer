@@ -29,7 +29,7 @@ class Movie extends React.Component {
                 error: true, 
                 errorMessage: `Oh no! We have run into an error: ${error.res.status}`,
             });
-            console.log(error);
+            console.log('movie error: ', error);
         }
     };
     render(){
