@@ -3,8 +3,13 @@ import React from 'react';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Card, Image } from 'react-bootstrap';
+import Weather from './modules/Weather.js';
+import Movie from './modules/Movie.js';
 
+let SERVER_API = process.env.REACT_APP_API_URL;
+console.log(SERVER_API);
 let API_KEY = process.env.REACT_APP_LOCATION_KEY;
+
 
 class App extends React.Component{
 
