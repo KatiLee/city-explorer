@@ -2,12 +2,12 @@ import './App.css';
 import React from 'react';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Card, Image, Alert } from 'react-bootstrap';
+import { Card, Image } from 'react-bootstrap';
 import Weather from './modules/Weather.js';
 import Movie from './modules/Movie.js';
 
 let SERVER_API = process.env.REACT_APP_API_URL;
-console.log(SERVER_API);
+console.log("dis da server ", SERVER_API);
 let API_KEY = process.env.REACT_APP_LOCATION_KEY;
 
 
@@ -18,9 +18,9 @@ class App extends React.Component{
     this.state = {
         citySearch: "",
         cityData: {},
-
-        cityLat: "",
-        cityLon: "",
+        lat: "",
+        lon: "",
+        cityName: "",
         areaMap: "",
         error: false,
         errorMessage: "",
@@ -32,20 +32,22 @@ class App extends React.Component{
   submitCityHandler = async (event) => {
       event.preventDefault();
     try {
-      let url = `https://us1.locationiq.com/v1/search?key=${API_KEY}&q=${this.state.city}&format=json`
+      let url = `https://us1.locationiq.com/v1/search?key=${API_KEY}&q=${this.state.citySearch}&format=json`
+      
       let cityInfo = await axios.get(url);
-      let longitude = cityInfo.data[0].lon;
-      let latitude = cityInfo.data[0].lat
+      
+      let lon = cityInfo.data[0].lon;
+      let lat = cityInfo.data[0].lat;
+
       this.setState({
         cityData: cityInfo.data[0],
-        cityLat: cityInfo.data[0].lat,
-        cityLon: cityInfo.data[0].lon,
+        lat: cityInfo.data[0].lat,
+        lon: cityInfo.data[0].lon,
         error: false,
-        areaMap: `https://maps.locationiq.com/v3/staticmap/search?key=${API_KEY}&center=${cityInfo.data[0].latitude},${cityInfo.data[0].longitude}&zoom=10`
+        areaMap: `https://maps.locationiq.com/v3/staticmap/search?key=${API_KEY}&center=${cityInfo.data[0].lat},${cityInfo.data[0].lon}&zoom=10`
       }); 
-      let collectCityStuff = cityInfo.data[0].display_name.split(',')[0];
-      this.weatherChild.current.reqWeather(latitude, longitude, collectCityStuff);
-      this.movieChild.current.reqMovie(collectCityStuff);
+      this.weatherChild.current.reqWeather(lat, lon, cityInfo);
+      this.movieChild.current.reqMovie(cityInfo);
     } catch (error){
       this.setState({
         error: true,
@@ -53,10 +55,11 @@ class App extends React.Component{
       });
     }
   };
-    
+
 handleCityInput = (event) => {
   this.setState({
     citySearch: event.target.value,
+    error: false,
   });
 };
 
@@ -75,10 +78,12 @@ handleCityInput = (event) => {
     <div>
       <Card>{this.state.errorMessage}</Card>
       <Card>{this.state.cityData.display_name}</Card>
-      <Card>{this.state.cityData.cityLat}</Card>
-      <Card>{this.state.cityData.cityLon}</Card>
+      <Card>{this.state.cityData.lat}</Card>
+      <Card>{this.state.cityData.lon}</Card>
       </div>
       <Image src= {this.state.areaMap} />
+      <Weather ref={this.weatherChild}/>
+      <Movie ref={this.movieChild}/>
     </>
     );
   }

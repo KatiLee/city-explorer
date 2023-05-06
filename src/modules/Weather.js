@@ -12,13 +12,13 @@ class Weather extends React.Component {
             errorMessage: "",
         };
     }
-    requestWeather = async (cityLat, cityLon, cityName) => {
+    requestWeather = async (lat, lon, cityName) => {
         try {
             let getWeather = await axios.get (`${process.env.REACT_APP_API_URL}/weather`,
             {params: 
             { cityname: cityName,
-              citylon: cityLon,
-              citylat: cityLat,
+              cityLon: lon,
+              cityLat: lat,
             }});
 
             this.setState({
