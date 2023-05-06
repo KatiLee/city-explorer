@@ -43,16 +43,19 @@ class App extends React.Component{
         cityData: cityInfo.data[0],
         lat: cityInfo.data[0].lat,
         lon: cityInfo.data[0].lon,
+        cityName: cityInfo.data[0].display_name,
         error: false,
         areaMap: `https://maps.locationiq.com/v3/staticmap/search?key=${API_KEY}&center=${cityInfo.data[0].lat},${cityInfo.data[0].lon}&zoom=10`
-      }); 
-      this.weatherChild.current.reqWeather(lat, lon, cityInfo);
-      this.movieChild.current.reqMovie(cityInfo);
+      });
+      let littleCity = cityInfo.data[0].display_name.split(',')[0]; 
+      this.weatherChild.current.reqWeather(lat, lon, littleCity);
+      this.movieChild.current.reqMovie(littleCity);
     } catch (error){
       this.setState({
         error: true,
         errorMessage: `Oh No! There has been an error: ${error.response.status}`,
       });
+      console.error(error);
     }
   };
 
@@ -80,10 +83,11 @@ handleCityInput = (event) => {
       <Card>{this.state.cityData.display_name}</Card>
       <Card>{this.state.cityData.lat}</Card>
       <Card>{this.state.cityData.lon}</Card>
-      </div>
+      {/* </div> */}
       <Image src= {this.state.areaMap} />
       <Weather ref={this.weatherChild}/>
       <Movie ref={this.movieChild}/>
+      </div>
     </>
     );
   }

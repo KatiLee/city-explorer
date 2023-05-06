@@ -14,6 +14,7 @@ class Movie extends React.Component {
     }
     reqMovie = async (cityName) => {
         try {
+            console.log('request movie', cityName);
             let getMovie = await axios.get(`${process.env.REACT_APP_API_URL}/movie`,
             {params: 
             {cityname: cityName,
