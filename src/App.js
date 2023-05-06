@@ -53,7 +53,7 @@ class App extends React.Component{
     } catch (error){
       this.setState({
         error: true,
-        errorMessage: `Oh No! There has been an error: ${error.response.status}`,
+        errorMessage: `Oh No! There has been an error: ${event.response.status}`,
       });
       console.error(error);
     }
@@ -83,11 +83,10 @@ handleCityInput = (event) => {
       <Card>{this.state.cityData.display_name}</Card>
       <Card>{this.state.cityData.lat}</Card>
       <Card>{this.state.cityData.lon}</Card>
-      {/* </div> */}
+      </div>
       <Image src= {this.state.areaMap} />
       <Weather ref={this.weatherChild}/>
       <Movie ref={this.movieChild}/>
-      </div>
     </>
     );
   }
