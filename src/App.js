@@ -3,45 +3,66 @@ import React from 'react';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Card, Image } from 'react-bootstrap';
+import Weather from './modules/Weather.js';
+import Movie from './modules/Movie.js';
 
+let SERVER_API = process.env.REACT_APP_API_URL;
+console.log("dis da server ", SERVER_API);
 let API_KEY = process.env.REACT_APP_LOCATION_KEY;
+
 
 class App extends React.Component{
 
   constructor(props){
     super(props);
     this.state = {
-        city: "",
+        citySearch: "",
         cityData: {},
-        error: false,
-        errorMessage: "",
         lat: "",
         lon: "",
+        cityName: "",
         areaMap: "",
+        error: false,
+        errorMessage: "",
     };
+    this.weatherChild = React.createRef();
+    this.movieChild = React.createRef();
   }
   
   submitCityHandler = async (event) => {
       event.preventDefault();
     try {
-      let url = `https://us1.locationiq.com/v1/search?key=${API_KEY}&q=${this.state.city}& format=json`
+      let url = `https://us1.locationiq.com/v1/search?key=${API_KEY}&q=${this.state.citySearch}&format=json`
+      
       let cityInfo = await axios.get(url);
+      
+      let lon = cityInfo.data[0].lon;
+      let lat = cityInfo.data[0].lat;
+
       this.setState({
         cityData: cityInfo.data[0],
+        lat: cityInfo.data[0].lat,
+        lon: cityInfo.data[0].lon,
+        cityName: cityInfo.data[0].display_name,
         error: false,
         areaMap: `https://maps.locationiq.com/v3/staticmap/search?key=${API_KEY}&center=${cityInfo.data[0].lat},${cityInfo.data[0].lon}&zoom=10`
-      }); 
+      });
+      let littleCity = cityInfo.data[0].display_name.split(',')[0]; 
+      this.weatherChild.current.reqWeather(lat, lon, littleCity);
+      this.movieChild.current.reqMovie(littleCity);
     } catch (error){
       this.setState({
         error: true,
-        errorMessage: `Oh No! There has been an error: ${error.response.status}`,
+        errorMessage: `Oh No! There has been an error: ${event.response.status}`,
       });
+      console.error(error);
     }
   };
-    
+
 handleCityInput = (event) => {
   this.setState({
-    city: event.target.value,
+    citySearch: event.target.value,
+    error: false,
   });
 };
 
@@ -64,6 +85,8 @@ handleCityInput = (event) => {
       <Card>{this.state.cityData.lon}</Card>
       </div>
       <Image src= {this.state.areaMap} />
+      <Weather ref={this.weatherChild}/>
+      <Movie ref={this.movieChild}/>
     </>
     );
   }
